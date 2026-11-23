@@ -1,8 +1,9 @@
 import "./globals.css";
 import localFont from "next/font/local";
 
-import Header from "@/components/layout/Header";
-import ThemeProvider from "@/components/providers/ThemeProvider";
+import Header from "../components/layout/Header";
+import ThemeProvider from "../components/providers/ThemeProvider";
+import AuthProvider from "../components/providers/AuthProvider";
 
 const vazir = localFont({
   src: [
@@ -36,10 +37,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning>
       <body className={vazir.className}>
-        <ThemeProvider>
-          <Header />
-          {children}
-        </ThemeProvider>
+          <ThemeProvider>
+        <AuthProvider>
+            <Header />
+            {children}
+        </AuthProvider>
+          </ThemeProvider>
       </body>
     </html>
   );

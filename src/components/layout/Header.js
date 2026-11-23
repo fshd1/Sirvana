@@ -33,7 +33,7 @@ export default function Header() {
         </button>
 
         {/* Logo & Theme Toggle */}
-        <div className="flex items-center gap-4 md:flex-row-reverse">
+        <div className="flex items-center gap-4 flex-row-reverse">
           <Link href="/" aria-label="صفحه اصلی سیروانا">
             {/* Mobile Icon */}
             <Image
@@ -71,7 +71,7 @@ export default function Header() {
         </nav>
         {/* Login Logout */}
         <div className="hidden md:flex">
-          <AuthButtons  />
+          <AuthButtons />
         </div>
       </div>
 
