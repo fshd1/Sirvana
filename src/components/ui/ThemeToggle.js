@@ -1,19 +1,22 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { FiMoon, FiSun } from "react-icons/fi";
+
+const subscribe = () => () => {};
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
 
   if (!mounted) {
-    return <span className="inline-block h-9 w-9" />;
+    return <span className="inline-block h-8 w-8" />;
   }
 
   const isDark = resolvedTheme === "dark";

@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "contract:emit": "prisma contract emit"
+    "lint": "eslint"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
