@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { HiOutlineMenu, HiX } from "react-icons/hi";
-import ThemeToggle from "../ui/ThemeToggle";
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { HiOutlineMenu } from "react-icons/hi";
 import AuthButtons from "../ui/AuthButtons";
+import Button from "../ui/Button";
+import ThemeToggle from "../ui/ThemeToggle";
 
 const navLinks = [
   { title: "صفحه اصلی", href: "/" },
@@ -104,6 +105,28 @@ export default function Header() {
           className="fixed inset-0 top-0 z-40 bg-black/60 md:hidden"
         />
       )}
+
+      <div className="flex flex-wrap items-center gap-4 p-6">
+        <Button>دکمه اصلی</Button>
+
+        <Button variant="secondary">دکمه ثانویه</Button>
+
+        <Button variant="outline">ویرایش پروفایل</Button>
+
+        <Button variant="ghost">انصراف</Button>
+
+        <Button variant="danger">حذف</Button>
+
+        <Button disabled>غیرفعال</Button>
+
+        <Button size="sm">کوچک</Button>
+
+        <Button size="lg">بزرگ</Button>
+
+        <Button isLoading loadingText="در حال ذخیره...">
+          ذخیره اطلاعات
+        </Button>
+      </div>
     </header>
   );
 }

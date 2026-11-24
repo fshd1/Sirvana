@@ -2,38 +2,89 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Light Theme */
+
 :root {
-  --background: #ffffff;
-  --surface: #f3f4f6;
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-elevated: #f1f5f9;
+
   --foreground: #111827;
   --muted: #64748b;
   --border: #e2e8f0;
-  --primary: #d94343;
+
+  --primary: #c43d2d;
+  --primary-hover: #aa3022;
   --primary-foreground: #ffffff;
+
+  --success: #15803d;
+  --warning: #b45309;
+  --danger: #dc2626;
+  --info: #2563eb;
 }
+
+/* Dark Theme */
 
 .dark {
   --background: #0b0e16;
-  --surface: #10141f;
+  --surface: #151925;
+  --surface-elevated: #1c2130;
+
   --foreground: #f5f6fa;
-  --muted: #9ca3af;
-  --border: #2a3040;
-  --primary: #e85d4a;
-  --primary-foreground: #ffffff;
+  --muted: #969eaf;
+  --border: #292f40;
+
+  --primary: #ef5b49;
+  --primary-hover: #dc4938;
+  --primary-foreground: #0b0e16;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
 }
+
+/* Tailwind Design Tokens */
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
+
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
 }
 
-/* :root {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-} */
+/* Base Styles */
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  button:not(:disabled) {
+    @apply cursor-pointer;
+  }
+
+  button:disabled {
+    @apply cursor-not-allowed;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-4 outline-primary;
+  }
+
+  ::selection {
+    @apply bg-primary text-primary-foreground;
+  }
+}
