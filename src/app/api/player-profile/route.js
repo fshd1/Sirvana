@@ -1,49 +1,33 @@
-import { prisma } from "../../../lib/prisma";
 import { auth } from "../../../../auth";
+import { prisma } from "../../../lib/prisma";
+import { validatePlayerProfile } from "../../../lib/validators/PlayerProfile";
 
 export async function POST(request) {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    return Response.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
   try {
-    const { rank, mmr, role, playTime } = await request.json();
+    const session = await auth();
 
-    if (typeof rank !== "string" || !rank.trim()) {
-      return Response.json({ message: "Invalid rank" }, { status: 400 });
-    }
-    if (!Number.isInteger(mmr) || mmr < 0) {
-      return Response.json({ message: "Invalid mmr" }, { status: 400 });
-    }
-    if (typeof role !== "string" || !role.trim()) {
-      return Response.json({ message: "Invalid role" }, { status: 400 });
-    }
-    if (typeof playTime !== "string" || !playTime.trim()) {
-      return Response.json({ message: "Invalid playTime" }, { status: 400 });
+    if (!session?.user?.id) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const existingProfile = await prisma.playerProfile.findUnique({
-      where: {
-        userId: session.user.id,
-      },
-    });
+    let body;
 
-    if (existingProfile) {
-      return Response.json(
-        { message: "Player profile already exists" },
-        { status: 409 },
-      );
+    try {
+      body = await request.json();
+    } catch {
+      return Response.json({ message: "Invalid JSON body" }, { status: 400 });
+    }
+
+    const validation = validatePlayerProfile(body);
+
+    if (!validation.success) {
+      return Response.json({ message: validation.message }, { status: 400 });
     }
 
     const newProfile = await prisma.playerProfile.create({
       data: {
+        ...validation.data,
         userId: session.user.id,
-        rank: rank.trim(),
-        mmr,
-        role: role.trim(),
-        playTime: playTime.trim(),
       },
     });
 
@@ -55,8 +39,6 @@ export async function POST(request) {
       { status: 201 },
     );
   } catch (error) {
-    console.error("Create profile error:", error);
-
     if (error?.code === "P2002") {
       return Response.json(
         { message: "Player profile already exists" },
@@ -64,11 +46,9 @@ export async function POST(request) {
       );
     }
 
-    if (error instanceof SyntaxError) {
-      return Response.json({ message: "Invalid JSON body" }, { status: 400 });
-    }
+    console.error("Create profile error:", error);
 
-    return Response.json({ message: "Internal Server Error" }, { status: 500 });
+    return Response.json({ message: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -104,5 +84,57 @@ export async function GET() {
     console.error("Get profile error:", error);
 
     return Response.json({ message: "Internal Server Error" }, { status: 500 });
+  }
+}
+
+export async function PATCH(request) {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return Response.json({ message: "Unauthorized user" }, { status: 401 });
+    }
+
+    let body;
+
+    try {
+      body = await request.json();
+    } catch {
+      return Response.json({ message: "Invalid JSON body" }, { status: 400 });
+    }
+
+    const validation = validatePlayerProfile(body, {
+      partial: true,
+    });
+
+    if (!validation.success) {
+      return Response.json({ message: validation.message }, { status: 400 });
+    }
+
+    const updatedProfile = await prisma.playerProfile.update({
+      where: {
+        userId: session.user.id,
+      },
+      data: validation.data,
+    });
+
+    return Response.json(
+      {
+        message: "Player profile updated successfully",
+        profile: updatedProfile,
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    if (error?.code === "P2025") {
+      return Response.json(
+        { message: "Player profile does not exist" },
+        { status: 404 },
+      );
+    }
+
+    console.error("Update player profile error:", error);
+
+    return Response.json({ message: "Internal server error" }, { status: 500 });
   }
 }
