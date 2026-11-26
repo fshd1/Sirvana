@@ -2,7 +2,10 @@
 
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
-import { FiMoon, FiSun } from "react-icons/fi";
+import { BsSunglasses } from "react-icons/bs";
+import { FiMoon } from "react-icons/fi";
+import { GoSun } from "react-icons/go";
+
 import { HiMiniMoon } from "react-icons/hi2";
 
 const subscribe = () => () => {};
@@ -32,18 +35,22 @@ export default function ThemeToggle() {
         type="button"
         aria-pressed={!isDark}
         aria-label="فعال کردن تم روشن"
-        className={`relative z-10 flex items-center justify-center rounded-full transition-colors size-8 ${isDark ? "text-muted hover:text-foreground" : "text-yellow-400"} `}
+        className={`relative z-10 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out size-8 ${isDark ? "text-muted hover:text-foreground" : "text-yellow-400"} `}
       >
-        <FiSun size={17} />
+        <GoSun size={18} />
+        <BsSunglasses
+          size={12}
+          className={`absolute text-black transition-all duration-300 ease-in-out ${isDark ? "opacity-0 -translate-y-2" : "opacity-100 translate-y-0"}`}
+        />
       </button>
       <button
         onClick={() => setTheme("dark")}
         type="button"
         aria-pressed={isDark}
         aria-label="فعال کردن تم تاریک"
-        className={`relative z-10 flex items-center justify-center rounded-full transition-colors size-8 ${isDark ? "text-foreground" : "text-muted hover:text-foreground"} `}
+        className={`relative z-10 flex items-center justify-center rounded-full transition-all size-8 ${isDark ? "text-foreground rotate-0" : "rotate-270 text-muted"} `}
       >
-        {isDark ? <HiMiniMoon size={17} /> : <FiMoon size={17} />}
+        {isDark ? <HiMiniMoon size={15} /> : <FiMoon size={15} />}
       </button>
 
       <span
