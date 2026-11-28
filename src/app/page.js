@@ -1,9 +1,11 @@
-import BannerContent from "../components/home/BannerContent";
+import HeroSection from "../components/home/HeroSection";
+import QuickAccess from "../components/home/QuickAccess";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <BannerContent />
+      <HeroSection />
+      <QuickAccess />
     </main>
   );
 }
